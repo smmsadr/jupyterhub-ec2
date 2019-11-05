@@ -18,3 +18,4 @@ tornado
 sqlalchemy
 pymssql
 psycopg2
+dask
