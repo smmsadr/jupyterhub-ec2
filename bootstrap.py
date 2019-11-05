@@ -159,12 +159,12 @@ def main():
     ] + pip_flags + [tljh_repo_path])
     logger.info('Setup tljh package')
     
-    #sudo -HE bash -c 'pip install -r <(curl https://raw.githubusercontent.com/smmsadr/jupyterhub-ec2/master/requirements.txt)'
-    run_subprocess([
-        os.path.join(hub_prefix, 'bin', 'pip'),
-        'install'
-    ] + pip_flags + ['-r <(curl https://raw.githubusercontent.com/smmsadr/jupyterhub-ec2/master/requirements.txt)'])
-    logger.info('Setup tljh package')
+#     #sudo -HE bash -c 'pip install -r <(curl https://raw.githubusercontent.com/smmsadr/jupyterhub-ec2/master/requirements.txt)'
+#     run_subprocess([
+#         os.path.join(hub_prefix, 'bin', 'pip'),
+#         'install'
+#     ] + pip_flags + ['-r <(curl https://raw.githubusercontent.com/smmsadr/jupyterhub-ec2/master/requirements.txt)'])
+#     logger.info('Setup tljh package')
     
     logger.info('Starting TLJH installer...')
     os.execv(
