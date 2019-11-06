@@ -1,21 +1,9 @@
-mock
-moto
-boto3
-jsonschema
-pylint
-deprecation
-coverage
-redis
+# Data Science Packages
+numpy
 pandas
-nose
-gdxpds
+
+# Visualization
 matplotlib
+
+# Analyse code
 line-profiler
-ipywidgets
-matplotlib
-jupyterlab
-tornado
-sqlalchemy
-pymssql
-psycopg2
-dask
