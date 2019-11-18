@@ -1,14 +1,70 @@
-# Jupyterhub ON EC2
+# Amazon Linux AMI
+To install Jupyterhub on EC2 instance follow these steps:
+1. Lunch EC2 instance:
+    a. In Step 1: Choose an Amazon Machine Image (AMI), we choose Amazon Linux AMI * as AMI.
+    b. In Step 2: Choose an Instance Type, choose the instance specs
+    c. In Step 3: Configure Instance Details after configure all options at Advanced Details/User data input these scripts:
 
-1. Follow this file steps to setup the EC2 instance:
-
-https://the-littlest-jupyterhub.readthedocs.io/en/latest/install/amazon.html
-
-2. instead of step 7, you can use this script for configuration. Under **Step 3: Configure Instance Details**, scroll to the bottom of the page and toggle the arrow next to Advanced Details. Scroll down to **User data**. Copy the text below, and paste it into the User data text box. Replace <admin-user-name> with the name of the first admin user for this JupyterHub. This admin user can log in after the JupyterHub is set up, and configure it. Remember to add your username!
-  
 ```bash
 #!/bin/bash
-curl https://raw.githubusercontent.com/smmsadr/jupyterhub-ec2/master/bootstrap.py \
-  | sudo python3 - \
-    --admin <admin-user-name>
+
+## Linux packages
+yum update -y
+yum install -y gcc-c++ make tmux
+## Node.js
+curl -sL https://rpm.nodesource.com/setup_6.x | sudo -E bash -
+yum install -y nodejs
+
+## Anaconda & jupyterhub
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -P /tmp
+bash /tmp/Miniconda3-latest-Linux-x86_64.sh -b -p /opt/anaconda3/
+echo 'export PATH=/opt/anaconda3/bin:$PATH' >> /etc/bashrc
+/opt/anaconda3/bin/conda install anaconda -y
+/opt/anaconda3/bin/pip install jupyterhub
+mkdir /etc/jupyterhub
+
+
+
+## Setting up node.js proxy
+npm install -g configurable-http-proxy
+
+
+
+## SSL Certification
+openssl genrsa 2048 > /etc/jupyterhub/host.key
+openssl req -new -x509 -nodes -sha256 -days 365 -key /etc/jupyterhub/host.key -out /etc/jupyterhub/host.cert
+
+
+
+## Jupyterhub configuration
+echo '''
+# Configuration file for jupyterhub.
+
+#------------------------------------------------------------------------------
+# JupyterHub(Application) configuration
+#------------------------------------------------------------------------------
+
+## An Application for starting a Multi-User Jupyter Notebook server.
+
+
+## Grant admin users permission to access single-user servers.
+c.JupyterHub.admin_users = {'admin.username'}
+c.LocalAuthenticator.create_system_users = True"
+## Path to SSL certificate file for the public facing interface of the proxy
+#
+# When setting this, you should also set ssl_key
+c.JupyterHub.ssl_cert = '/etc/jupyterhub/host.cert'
+
+## Path to SSL key file for the public facing interface of the proxy
+#
+# When setting this, you should also set ssl_cert
+c.JupyterHub.ssl_key = '/etc/jupyterhub/host.key'
+'''> /etc/jupyterhub/jupyterhub_config.py
+```
+
+3. Now we can ssh to instance, and after 15 minutes all should be installed properly. Run this script on shell to start a jupyterhub in tmux screen, and we can detach from screen with ctrl+b+d:
+
+```shell
+~# sudo tmux new -s jupyterhub
+[tmux:jupyterhub]~$ jupyterhub -f /etc/jupyterhub/jupyterhub_config.py --port 443
 ```
