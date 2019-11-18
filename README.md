@@ -1,8 +1,11 @@
 # Amazon Linux AMI
 To install Jupyterhub on EC2 instance follow these steps:
 1. Lunch EC2 instance:
+
     a. In Step 1: Choose an Amazon Machine Image (AMI), we choose Amazon Linux AMI * as AMI.
+    
     b. In Step 2: Choose an Instance Type, choose the instance specs
+    
     c. In Step 3: Configure Instance Details after configure all options at Advanced Details/User data input these scripts:
 
 ```bash
