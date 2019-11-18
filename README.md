@@ -6,9 +6,14 @@ To install Jupyterhub on EC2 instance follow these steps, to *Lunch EC2 instance
 3. In Step 3: Configure Instance Details after configure all options at Advanced Details/User data input these scripts:
 
 ```
+#!/bin/bash
+curl https://raw.githubusercontent.com/smmsadr/jupyterhub-ec2/master/bootstrap.sh \
+  | sudo bash
 ```
 
-4. Now we can ssh to instance, and after 15 minutes all should be installed properly. Run this script on shell to start a jupyterhub in tmux screen, and we can detach from screen with ctrl+b+d:
+4. In case, you have validate ssl key and cert, just replace /etc/jupyterhub/host.* with them.
+
+5. Now we can ssh to instance, and after 15 minutes all should be installed properly. Run this script on shell to start a jupyterhub in tmux screen, and we can detach from screen with ctrl+b+d:
 
 ```shell
 ~# sudo tmux new -s jupyterhub
