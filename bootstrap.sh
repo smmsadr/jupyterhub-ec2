@@ -41,16 +41,17 @@ echo '''
  
 ## Grant admin users permission to access single-user servers.
 c.JupyterHub.admin_users = {'admin.username'}
-c.LocalAuthenticator.create_system_users = True"
-c.LocalAuthenticator.add_user_cmd = ['adduser', '-m', '-G', 'jupyterhub-users']
+c.LocalAuthenticator.create_system_users = True
+c.LocalAuthenticator.add_user_cmd = ["adduser", "-m", "-G", "jupyterhub-users"]
+c.LocalAuthenticator.group_whitelist = {"jupyterhub-users"}
 
 ## Path to SSL certificate file for the public facing interface of the proxy
 #
 # When setting this, you should also set ssl_key
-c.JupyterHub.ssl_cert = '/etc/jupyterhub/host.cert'
+c.JupyterHub.ssl_cert = "/etc/jupyterhub/host.cert"
  
 ## Path to SSL key file for the public facing interface of the proxy
 #
 # When setting this, you should also set ssl_cert
-c.JupyterHub.ssl_key = '/etc/jupyterhub/host.key'
+c.JupyterHub.ssl_key = "/etc/jupyterhub/host.key"
 '''> /etc/jupyterhub/jupyterhub_config.py
